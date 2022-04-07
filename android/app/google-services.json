@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "989067766804",
+    "project_id": "hatzolah-2d750",
+    "storage_bucket": "hatzolah-2d750.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:989067766804:android:65b6ebce5f59c26a37cb01",
+        "android_client_info": {
+          "package_name": "com.jhnet.hatzolah_dispatcher"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "989067766804-la0u2ba9u6nt0qsogpkr675j9vlfeit0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxcFRNktHuccJIoxS1QVFaNwkXnKHjbuw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "989067766804-la0u2ba9u6nt0qsogpkr675j9vlfeit0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
