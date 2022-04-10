@@ -1,27 +1,31 @@
 part of 'calls_cubit.dart';
 
+
 class MainCallsState extends Equatable {
   final String? message;
   final String? errorMessage;
   final List<Call> userCalls;
   final List<Call> newCalls;
+  final List<NatureEmergencyConfig> configs;
 
-  const MainCallsState({this.message, this.errorMessage, this.userCalls = const [], this.newCalls = const []});
+  const MainCallsState({this.message, this.errorMessage, this.userCalls = const [], this.newCalls = const [], this.configs = const []});
 
   @override
-  List<Object?> get props => [message, errorMessage, userCalls, newCalls];
+  List<Object?> get props => [message, errorMessage, userCalls, newCalls, configs];
 
   MainCallsState copyWith({
     String? message,
     String? errorMessage,
     List<Call>? userCalls,
     List<Call>? newCalls,
+    List<NatureEmergencyConfig>? configs,
   }) {
     return MainCallsState(
       message: message ?? this.message,
       errorMessage: errorMessage ?? this.errorMessage,
       userCalls: userCalls ?? this.userCalls,
       newCalls: newCalls ?? this.newCalls,
+      configs: configs ?? this.configs,
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hatzolah_dispatcher_app/core/dependencies.dart';
 import 'package:hatzolah_dispatcher_app/models/call.dart';
+import 'package:hatzolah_dispatcher_app/models/natureEmergencyConfig.dart';
 import 'package:hatzolah_dispatcher_app/models/patient.dart';
 import 'package:hatzolah_dispatcher_app/repositories/callRepository.dart';
 import 'package:hatzolah_dispatcher_app/repositories/patientRepository.dart';
@@ -75,6 +76,16 @@ class CallsCubit extends Cubit<CallsState> {
       });
     } catch (error) {
       emit(CallsError(state.mainCallsState.copyWith(message: 'Failed loading User Calls')));
+    }
+  }
+
+  getNatureEmergencyConfigs() async{
+    try {
+      emit(CallsLoading(state.mainCallsState.copyWith(message: 'Get list of Emergency nature configs')));
+      List<NatureEmergencyConfig> configs = await _callRepository.getNatureEmergencyConfigs();
+      emit(CallsLoaded(state.mainCallsState.copyWith(message: "Loaded Emergency nature configs", configs: configs)));
+    } catch (error) {
+      emit(CallsError(state.mainCallsState.copyWith(message: 'Failed loading Emergency nature configs')));
     }
   }
 }

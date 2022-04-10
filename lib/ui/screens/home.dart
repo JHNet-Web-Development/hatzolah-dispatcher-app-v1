@@ -9,6 +9,7 @@ import 'package:hatzolah_dispatcher_app/models/call.dart';
 import 'package:hatzolah_dispatcher_app/models/hospital.dart';
 import 'package:hatzolah_dispatcher_app/models/patient.dart';
 import 'package:hatzolah_dispatcher_app/ui/screens/hospitalCreateEdit.dart';
+import 'package:hatzolah_dispatcher_app/ui/screens/natureOfEmergency.dart';
 import 'package:hatzolah_dispatcher_app/ui/widgets/home/callWidget.dart';
 import 'package:hatzolah_dispatcher_app/ui/widgets/home/hospitalGridWidget.dart';
 import 'package:uuid/uuid.dart';
@@ -102,6 +103,13 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     );
   }
 
+  _createCall() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const NatureOfEmergencyScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -142,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
 
-          onPressed: () => tabController.index == 0 ?  null :  _createHospital(),
+          onPressed: () => tabController.index == 0 ?  _createCall() :  _createHospital(),
           backgroundColor: successColour,
         ),
       ),
