@@ -4,7 +4,7 @@ import 'package:hatzolah_dispatcher_app/constants/constants.dart';
 import 'package:hatzolah_dispatcher_app/core/dependencies.dart';
 import 'package:hatzolah_dispatcher_app/cubit/hospital/hospital_cubit.dart';
 import 'package:hatzolah_dispatcher_app/models/hospital.dart';
-import 'package:hatzolah_dispatcher_app/ui/screens/hospitalEdit.dart';
+import 'package:hatzolah_dispatcher_app/ui/screens/hospitalCreateEdit.dart';
 import 'package:intl/intl.dart';
 
 class HospitalGridWidget extends StatefulWidget {
@@ -20,7 +20,7 @@ class _HospitalGridWidgetState extends State<HospitalGridWidget> {
   _editHospital(Hospital hospital) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => HospitalEditScreen(hospital: hospital)),
+      MaterialPageRoute(builder: (context) => HospitalCreateEditScreen(hospital: hospital)),
     );
   }
 

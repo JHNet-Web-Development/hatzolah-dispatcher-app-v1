@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hatzolah_dispatcher_app/constants/constants.dart';
 import 'package:hatzolah_dispatcher_app/core/dependencies.dart';
 import 'package:hatzolah_dispatcher_app/cubit/authentication/authentication_cubit.dart';
@@ -9,6 +8,7 @@ import 'package:hatzolah_dispatcher_app/cubit/hospital/hospital_cubit.dart';
 import 'package:hatzolah_dispatcher_app/models/call.dart';
 import 'package:hatzolah_dispatcher_app/models/hospital.dart';
 import 'package:hatzolah_dispatcher_app/models/patient.dart';
+import 'package:hatzolah_dispatcher_app/ui/screens/hospitalCreateEdit.dart';
 import 'package:hatzolah_dispatcher_app/ui/widgets/home/callWidget.dart';
 import 'package:hatzolah_dispatcher_app/ui/widgets/home/hospitalGridWidget.dart';
 import 'package:uuid/uuid.dart';
@@ -20,13 +20,14 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   // Constant values
   final String _welcomeMessage = "Welcome to Hatzolah.";
 
   final AuthenticationCubit _authenticationCubit = sl<AuthenticationCubit>();
   final CallsCubit _callsCubit = sl<CallsCubit>();
   final HospitalCubit _hospitalCubit = sl<HospitalCubit>();
+  late TabController tabController;
 
   //Remove this
   _createCalls() {
@@ -57,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+   tabController = TabController(length: 2, vsync: this);
     _callsCubit.getNewCalls();
     _callsCubit.getUserCalls();
     _hospitalCubit.getHospitals();
@@ -93,6 +95,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  _createHospital() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const HospitalCreateEditScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -100,7 +109,9 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: primaryColour,
-          bottom: const TabBar(tabs: [
+          bottom:  TabBar(
+              controller: tabController,
+              tabs: const [
             Tab(
                 text: "Calls",
                 icon: Icon(Icons.local_hospital)
@@ -121,17 +132,26 @@ class _HomeScreenState extends State<HomeScreen> {
         body: SizedBox(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: const TabBarView(children: [
+          child:  TabBarView(
+            controller: tabController,
+              children: const [
             CallWidget(myList: false,),
             HospitalGridWidget(),
           ])
         ),
         floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: null,
+          child: const Icon(Icons.add),
+
+          onPressed: () => tabController.index == 0 ?  null :  _createHospital(),
           backgroundColor: successColour,
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
   }
 }

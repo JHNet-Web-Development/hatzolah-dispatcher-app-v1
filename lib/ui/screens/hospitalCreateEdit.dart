@@ -5,17 +5,18 @@ import 'package:hatzolah_dispatcher_app/constants/constants.dart';
 import 'package:hatzolah_dispatcher_app/core/dependencies.dart';
 import 'package:hatzolah_dispatcher_app/cubit/hospital/hospital_cubit.dart';
 import 'package:hatzolah_dispatcher_app/models/hospital.dart';
+import 'package:uuid/uuid.dart';
 
 
-class HospitalEditScreen extends StatefulWidget {
-  final Hospital hospital;
-  const HospitalEditScreen({Key? key, required this.hospital}) : super(key: key);
+class HospitalCreateEditScreen extends StatefulWidget {
+  final Hospital? hospital;
+  const HospitalCreateEditScreen({Key? key,  this.hospital}) : super(key: key);
 
   @override
-  State<HospitalEditScreen> createState() => _HospitalEditScreenState();
+  State<HospitalCreateEditScreen> createState() => _HospitalCreateEditScreenState();
 }
 
-class _HospitalEditScreenState extends State<HospitalEditScreen> {
+class _HospitalCreateEditScreenState extends State<HospitalCreateEditScreen> {
   // cubits
   final HospitalCubit _hospitalsCubit = sl<HospitalCubit>();
 
@@ -33,7 +34,7 @@ class _HospitalEditScreenState extends State<HospitalEditScreen> {
   @override
   void initState() {
     super.initState();
-    nameController.text = widget.hospital.name;
+    nameController.text = widget.hospital?.name??"";
   }
   @override
   Widget build(BuildContext context) {
@@ -50,13 +51,13 @@ class _HospitalEditScreenState extends State<HospitalEditScreen> {
       },
       child: Scaffold(
           appBar: AppBar(
-            title: Text(widget.hospital.name),
+            title: Text(widget.hospital?.name ?? "Create Hospital"),
           ),
           body: Center(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(children: [
-                Text(widget.hospital.name),
+                Text(widget.hospital?.name??""),
                 const SizedBox(height: 20),
                 Form(
                   key: _formKey,
@@ -82,8 +83,8 @@ class _HospitalEditScreenState extends State<HospitalEditScreen> {
                       ),
                       const SizedBox(height: 20),
                       ElevatedButton(
-                        onPressed: () => _formKey.currentState!.validate() ? _saveInfo(widget.hospital) : null,
-                        child: const Text("Update"),
+                        onPressed: () => _formKey.currentState!.validate() ? _saveInfo(widget.hospital != null ? widget.hospital! : Hospital(id: const Uuid().v4(), name: nameController.text.trim(), createdDate: Timestamp.now())) : null,
+                        child: Text(widget.hospital != null ? "Update" : "Create"),
                         style: ElevatedButton.styleFrom(
                           primary: primaryColour,
                         ),
