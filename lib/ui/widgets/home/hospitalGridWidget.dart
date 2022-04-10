@@ -4,6 +4,7 @@ import 'package:hatzolah_dispatcher_app/constants/constants.dart';
 import 'package:hatzolah_dispatcher_app/core/dependencies.dart';
 import 'package:hatzolah_dispatcher_app/cubit/hospital/hospital_cubit.dart';
 import 'package:hatzolah_dispatcher_app/models/hospital.dart';
+import 'package:hatzolah_dispatcher_app/ui/screens/hospitalEdit.dart';
 import 'package:intl/intl.dart';
 
 class HospitalGridWidget extends StatefulWidget {
@@ -15,6 +16,13 @@ class HospitalGridWidget extends StatefulWidget {
 
 class _HospitalGridWidgetState extends State<HospitalGridWidget> {
   final HospitalCubit _hospitalCubit = sl<HospitalCubit>();
+
+  _editHospital(Hospital hospital) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HospitalEditScreen(hospital: hospital)),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +38,7 @@ class _HospitalGridWidgetState extends State<HospitalGridWidget> {
                   itemBuilder: (context, index) {
                     Hospital hospital = state.mainHospitalState.hospitals[index];
                     return GestureDetector(
-                      onTap: () => null,
+                      onTap: () => _editHospital(hospital),
                       child: Card(
                         child: ListTile(
                           leading: Icon(Icons.apartment, size: 40, color: primaryColour),
