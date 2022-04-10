@@ -5,7 +5,9 @@ import 'package:hatzolah_dispatcher_app/constants/constants.dart';
 import 'package:hatzolah_dispatcher_app/core/dependencies.dart';
 import 'package:hatzolah_dispatcher_app/cubit/authentication/authentication_cubit.dart';
 import 'package:hatzolah_dispatcher_app/cubit/calls/calls_cubit.dart';
+import 'package:hatzolah_dispatcher_app/cubit/hospital/hospital_cubit.dart';
 import 'package:hatzolah_dispatcher_app/models/call.dart';
+import 'package:hatzolah_dispatcher_app/models/hospital.dart';
 import 'package:hatzolah_dispatcher_app/models/patient.dart';
 import 'package:hatzolah_dispatcher_app/ui/widgets/home/callWidget.dart';
 import 'package:uuid/uuid.dart';
@@ -23,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final AuthenticationCubit _authenticationCubit = sl<AuthenticationCubit>();
   final CallsCubit _callsCubit = sl<CallsCubit>();
+  final HospitalCubit _hospitalCubit = sl<HospitalCubit>();
 
   //Remove this
   _createCalls() {
@@ -38,12 +41,25 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  _createHospitals() {
+
+    List<Hospital> hospitals = [
+      Hospital(id: const Uuid().v4(), name: "Netcare Sunward Park Hospital", createdDate: Timestamp.now()),
+      Hospital(id: const Uuid().v4(), name: "Netcare Sunninghill Hospital", createdDate: Timestamp.now()),
+    ];
+
+    for (var i = 0; i < hospitals.length; i++) {
+      _hospitalCubit.createUpdateHospital(hospitals[i]);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _callsCubit.getNewCalls();
     _callsCubit.getUserCalls();
     //_createCalls();
+   // _createHospitals();
   }
 
   _confirmLogout() {
@@ -84,12 +100,12 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: primaryColour,
           bottom: const TabBar(tabs: [
             Tab(
-                text: "New Calls",
+                text: "Calls",
                 icon: Icon(Icons.local_hospital)
             ),
             Tab(
-                text: "My Calls",
-                icon: Icon(Icons.list)
+                text: "Hospitals",
+                icon: Icon(Icons.apartment)
             ),
           ]),
           title: const Text("Home"),
@@ -107,6 +123,11 @@ class _HomeScreenState extends State<HomeScreen> {
             CallWidget(myList: false,),
             CallWidget(myList: true,)
           ])
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: null,
+          backgroundColor: successColour,
         ),
       ),
     );

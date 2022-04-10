@@ -5,9 +5,11 @@ import 'package:get_it/get_it.dart';
 import 'package:hatzolah_dispatcher_app/cubit/authentication/authentication_cubit.dart';
 import 'package:hatzolah_dispatcher_app/cubit/calls/calls_cubit.dart';
 import 'package:hatzolah_dispatcher_app/cubit/general/general_cubit.dart';
+import 'package:hatzolah_dispatcher_app/cubit/hospital/hospital_cubit.dart';
 import 'package:hatzolah_dispatcher_app/cubit/login/login_cubit.dart';
 import 'package:hatzolah_dispatcher_app/repositories/authenticationRepository.dart';
 import 'package:hatzolah_dispatcher_app/repositories/callRepository.dart';
+import 'package:hatzolah_dispatcher_app/repositories/hospitalRepository.dart';
 import 'package:hatzolah_dispatcher_app/repositories/patientRepository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,12 +33,14 @@ class DependencyInjection{
     sl.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepository());
     sl.registerLazySingleton<CallRepository>(() => CallRepository());
     sl.registerLazySingleton<PatientRepository>(() => PatientRepository());
+    sl.registerLazySingleton<HospitalRepository>(() => HospitalRepository());
   }
 
   static _cubits(){
     sl.registerLazySingleton<GeneralCubit>(() => GeneralCubit());
     sl.registerLazySingleton<LoginCubit>(() => LoginCubit());
     sl.registerLazySingleton<CallsCubit>(() => CallsCubit());
+    sl.registerLazySingleton<HospitalCubit>(() => HospitalCubit());
     sl.registerLazySingleton<AuthenticationCubit>(() => AuthenticationCubit()..appStarted());
   }
 }
