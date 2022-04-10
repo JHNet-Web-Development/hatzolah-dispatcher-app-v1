@@ -9,7 +9,7 @@ class HatzolahTheme {
       errorColor: secondaryColour,
       appBarTheme: AppBarTheme(
         backgroundColor: primaryColour,
-      )
+      ),
     );
   }
 }

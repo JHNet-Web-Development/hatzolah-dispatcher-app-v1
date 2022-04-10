@@ -42,9 +42,28 @@ class _HospitalGridWidgetState extends State<HospitalGridWidget> {
                       child: Card(
                         child: ListTile(
                           leading: Icon(Icons.apartment, size: 40, color: primaryColour),
-                          title: Text(hospital.name),
-                          subtitle: Text(DateFormat('dd/MM/yyyy, hh:mm a').format(hospital.createdDate.toDate())),
-                          isThreeLine: true,
+                          title: Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: RichText(
+                              textAlign: TextAlign.left,
+                              text: TextSpan(
+                                  children: <TextSpan>[
+                                    TextSpan(text: 'Name: ', style: TextStyle(color: Colors.grey, fontSize: 12),),
+                                    TextSpan(text: hospital.name, style: TextStyle(color: Colors.black, fontSize: 14),)
+                                  ]
+                              ),
+                            ),
+                          ),
+                          subtitle: RichText(
+                            textAlign: TextAlign.left,
+                            text: TextSpan(
+                                children: <TextSpan>[
+                                  TextSpan(text: 'Created Date: ', style: TextStyle(color: Colors.grey, fontSize: 12),),
+                                  TextSpan(text: DateFormat('dd/MM/yyyy, hh:mm a').format(hospital.createdDate.toDate()), style: TextStyle(color: Colors.black, fontSize: 14),)
+                                ]
+                            ),
+                          ),
+                          isThreeLine: false,
                         ),
                       ),
                     );
