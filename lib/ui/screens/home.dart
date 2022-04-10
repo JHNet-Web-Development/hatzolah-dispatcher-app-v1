@@ -10,6 +10,7 @@ import 'package:hatzolah_dispatcher_app/models/call.dart';
 import 'package:hatzolah_dispatcher_app/models/hospital.dart';
 import 'package:hatzolah_dispatcher_app/models/patient.dart';
 import 'package:hatzolah_dispatcher_app/ui/widgets/home/callWidget.dart';
+import 'package:hatzolah_dispatcher_app/ui/widgets/home/hospitalGridWidget.dart';
 import 'package:uuid/uuid.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -58,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _callsCubit.getNewCalls();
     _callsCubit.getUserCalls();
+    _hospitalCubit.getHospitals();
     //_createCalls();
    // _createHospitals();
   }
@@ -121,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
           width: MediaQuery.of(context).size.width,
           child: const TabBarView(children: [
             CallWidget(myList: false,),
-            CallWidget(myList: true,)
+            HospitalGridWidget(),
           ])
         ),
         floatingActionButton: FloatingActionButton(
