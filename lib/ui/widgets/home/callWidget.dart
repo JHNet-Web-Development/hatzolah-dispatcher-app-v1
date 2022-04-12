@@ -74,7 +74,7 @@ class _CallWidgetState extends State<CallWidget> {
                           leading: widget.myList ? Icon(Icons.medical_services, size: 40, color: successColour) : Icon(Icons.error, size: 40, color: dangerColour),
                           title: Text(call.patient.firstName + " " + call.patient.lastName),
                           subtitle: Text(DateFormat('dd/MM/yyyy, hh:mm a').format(call.createdDate.toDate())),
-                          isThreeLine: true,
+                          isThreeLine: false,
                         ),
                       ),
                     );

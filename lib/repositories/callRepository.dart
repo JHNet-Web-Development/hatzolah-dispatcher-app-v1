@@ -12,11 +12,6 @@ class CallRepository{
     toFirestore: (call, _) => call!.toMap(),
   );
 
-  final CollectionReference<NatureEmergencyConfig?> _natureEmergencyConfig = _firebaseFirestore.collection('natureEmergencyConfig').withConverter<NatureEmergencyConfig?>(
-    fromFirestore: (snapshot, _) => snapshot.data() != null ? NatureEmergencyConfig.fromMap(snapshot.data()!) : null,
-    toFirestore: (config, _) => config!.toMap(),
-  );
-
   final AuthenticationCubit _authenticationCubit = sl<AuthenticationCubit>();
 
   createUpdateCall(Call call) {
@@ -43,11 +38,10 @@ class CallRepository{
   }
 
  Future<List<NatureEmergencyConfig>> getNatureEmergencyConfigs() async {
- List<NatureEmergencyConfig> configList = [];
-  QuerySnapshot<NatureEmergencyConfig?> configs = await _natureEmergencyConfig.get();
-   for (var doc in configs.docs) {
-     configList.add(doc.data()!);
-   }
+  List<NatureEmergencyConfig> configList = [
+    const NatureEmergencyConfig(id: 1, name: "Abdominal Pain"),
+    const NatureEmergencyConfig(id: 2, name: "Bites and stings"),
+  ];
   return configList;
   }
 
