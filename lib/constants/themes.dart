@@ -10,6 +10,7 @@ class HatzolahTheme {
       appBarTheme: AppBarTheme(
         backgroundColor: primaryColour,
       ),
+      scaffoldBackgroundColor: backgroundColour
     );
   }
 }

@@ -151,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           child: const Icon(Icons.add),
 
           onPressed: () => tabController.index == 0 ?  _createCall() :  _createHospital(),
-          backgroundColor: successColour,
+          backgroundColor: primaryColour,
         ),
       ),
     );

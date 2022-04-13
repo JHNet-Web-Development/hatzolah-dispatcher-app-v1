@@ -41,7 +41,7 @@ class _HospitalGridWidgetState extends State<HospitalGridWidget> {
                       onTap: () => _editHospital(hospital),
                       child: Card(
                         child: ListTile(
-                          leading: Icon(Icons.apartment, size: 40, color: primaryColour),
+                          leading: Icon(Icons.apartment, size: 40, color: Colors.grey),
                           title: Padding(
                             padding: const EdgeInsets.only(bottom: 8.0),
                             child: RichText(
