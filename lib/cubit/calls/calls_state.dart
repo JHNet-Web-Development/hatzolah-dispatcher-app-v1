@@ -7,11 +7,12 @@ class MainCallsState extends Equatable {
   final List<Call> userCalls;
   final List<Call> newCalls;
   final List<NatureEmergencyConfig> configs;
+  final List<Patient> patients;
 
-  const MainCallsState({this.message, this.errorMessage, this.userCalls = const [], this.newCalls = const [], this.configs = const []});
+  const MainCallsState({this.message, this.errorMessage, this.userCalls = const [], this.newCalls = const [], this.configs = const [], this.patients = const []});
 
   @override
-  List<Object?> get props => [message, errorMessage, userCalls, newCalls, configs];
+  List<Object?> get props => [message, errorMessage, userCalls, newCalls, configs, patients];
 
   MainCallsState copyWith({
     String? message,
@@ -19,6 +20,7 @@ class MainCallsState extends Equatable {
     List<Call>? userCalls,
     List<Call>? newCalls,
     List<NatureEmergencyConfig>? configs,
+    List<Patient>? patients,
   }) {
     return MainCallsState(
       message: message ?? this.message,
@@ -26,6 +28,7 @@ class MainCallsState extends Equatable {
       userCalls: userCalls ?? this.userCalls,
       newCalls: newCalls ?? this.newCalls,
       configs: configs ?? this.configs,
+      patients: patients ?? this.patients,
     );
   }
 }

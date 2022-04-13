@@ -1,5 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hatzolah_dispatcher_app/constants/constants.dart';
+import 'package:hatzolah_dispatcher_app/core/dependencies.dart';
+import 'package:hatzolah_dispatcher_app/cubit/calls/calls_cubit.dart';
+import 'package:hatzolah_dispatcher_app/models/patient.dart';
+import 'package:uuid/uuid.dart';
 
 class AbdominalPainScreen extends StatefulWidget {
   const AbdominalPainScreen({Key? key}) : super(key: key);
@@ -9,6 +15,9 @@ class AbdominalPainScreen extends StatefulWidget {
 }
 
 class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
+  final CallsCubit _callsCubit = sl<CallsCubit>();
+
+  final TextEditingController addressController = TextEditingController();
   bool _patientAlert = false;
   bool _troubleBreathing = false;
   bool _bleeding = false;
@@ -22,6 +31,12 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
   }
 
   @override
+  void initState() {
+    _callsCubit.getAllPatients();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -32,9 +47,56 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              const Text("Patient Details", style: TextStyle(fontSize: 16),),
+              Padding(
+                padding: const EdgeInsets.only(top: 25, left: 5, right: 5, bottom: 10),
+                child: BlocBuilder<CallsCubit, CallsState>(
+                  bloc: _callsCubit,
+                  builder: (context, state) {
+                    List<Patient> patients = state.mainCallsState.patients;
+                    return DropdownButtonFormField(
+                        items: patients.map((Patient patient) {
+                          return DropdownMenuItem<String>(
+                            value: patient.id,
+                            child: Text(patient.firstName + " " + patient.lastName),
+                          );
+                        }).toList(),
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius:  BorderRadius.circular(5.0),
+                            borderSide:  const BorderSide(),
+                          ),
+                          labelText: "Patient",
+                          hintText: "Bill Gates",
+                        ),
+                        onChanged: (_) {},
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 25),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius:  BorderRadius.circular(5.0),
+                      borderSide:  const BorderSide(),
+                    ),
+                    labelText: "Address",
+                    hintText: "29 Durham St, Sydenham, Johannesburg, 2192",
+                  ),
+                  controller: addressController,
+                  validator: (text) {
+                    if (text == null || text.isEmpty) {
+                      return 'Address is Required';
+                    }
+                    return null;
+                  },
+                ),
+              ),
               const Text("Please answer the following questions", style: TextStyle(fontSize: 16),),
               Padding(
-                padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
+                padding: const EdgeInsets.only(top: 25, left: 5, right: 5, bottom: 10),
                 child: SwitchListTile(
                   title: const Text('Is the patient alert?'),
                   value: _patientAlert,
@@ -43,7 +105,7 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
                       _patientAlert = value;
                     });
                   },
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
                 ),
               ),
               Padding(
@@ -56,7 +118,7 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
                       _troubleBreathing = value;
                     });
                   },
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
                 ),
               ),
               Padding(
@@ -69,7 +131,7 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
                       _bleeding = value;
                     });
                   },
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
                 ),
               ),
               Padding(
@@ -82,7 +144,7 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
                       _dizzyrOrFaint = value;
                     });
                   },
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
                 ),
               ),
               Padding(
@@ -95,7 +157,7 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
                       _pale = value;
                     });
                   },
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
                 ),
               ),
               Padding(
@@ -108,7 +170,7 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
                       _chestPain = value;
                     });
                   },
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
                 ),
               ),
               Padding(
@@ -121,7 +183,7 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
                       _recentSurgery = value;
                     });
                   },
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
                 ),
               ),
               Padding(
@@ -134,7 +196,7 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
                       _recentVomiting = value;
                     });
                   },
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
                 ),
               ),
               const SizedBox(height: 20),

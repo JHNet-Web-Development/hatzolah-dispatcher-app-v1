@@ -88,4 +88,14 @@ class CallsCubit extends Cubit<CallsState> {
       emit(CallsError(state.mainCallsState.copyWith(message: 'Failed loading Emergency nature configs')));
     }
   }
+
+  getAllPatients() async{
+    try {
+      emit(CallsLoading(state.mainCallsState.copyWith(message: 'Patients Loading')));
+      List<Patient> patients = await _patientRepository.getAllPatients();
+      emit(CallsLoaded(state.mainCallsState.copyWith(message: "Patients Loaded", patients: patients)));
+    } catch (error) {
+      emit(CallsError(state.mainCallsState.copyWith(message: 'Failed loading Patients')));
+    }
+  }
 }

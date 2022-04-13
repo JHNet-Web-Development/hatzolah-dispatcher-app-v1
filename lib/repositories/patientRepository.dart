@@ -17,4 +17,13 @@ class PatientRepository{
       throw 'Error ${error.toString()}';
     }
   }
+
+  Future<List<Patient>> getAllPatients() async {
+    List<Patient> patientList = [];
+    QuerySnapshot<Patient?> configs = await _callsCollection.get();
+    for (var doc in configs.docs) {
+      patientList.add(doc.data()!);
+    }
+    return patientList;
+  }
 }
