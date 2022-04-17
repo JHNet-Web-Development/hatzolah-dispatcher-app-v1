@@ -21,7 +21,7 @@ class AbdominalPainScreen extends StatefulWidget {
 class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
   final CallsCubit _callsCubit = sl<CallsCubit>();
 
-  String? _currentPatientId;
+  Patient? _currentPatient;
   final TextEditingController addressController = TextEditingController();
   bool _patientAlert = false;
   bool _troubleBreathing = false;
@@ -46,12 +46,13 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
     );
     _callsCubit.createUpdateCall(Call(
         id: const Uuid().v4(),
-        patientId: _currentPatientId!,
+        patientId: _currentPatient!.id,
         patient: Patient(
-            id: "1o4Ne6GsML51CAUuqEmp",
-            firstName: "John",
-            lastName: "Doe",
-            createdDate: Timestamp.now()),
+            id: _currentPatient!.id,
+            firstName: _currentPatient!.firstName,
+            lastName: _currentPatient!.lastName,
+            createdDate: _currentPatient!.createdDate
+        ),
         address: addressController.value.toString().trim(),
         questionType: QuestionList.abdominalPain.index,
         questions: questions,
@@ -97,7 +98,7 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
                   builder: (context, state) {
                     List<Patient> patients = state.mainCallsState.patients;
                     return DropdownButtonFormField(
-                      value: _currentPatientId,
+                      value: _currentPatient,
                       hint: const Text(
                         'Please select a Patient',
                       ),
@@ -123,7 +124,7 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
                         labelText: "Patient",
                       ),
                       onChanged: (value) {
-                        _currentPatientId = value as String;
+                        _currentPatient = value as Patient;
                       },
                     );
                   },
