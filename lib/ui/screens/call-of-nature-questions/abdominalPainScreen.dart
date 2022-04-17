@@ -47,13 +47,14 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
     _callsCubit.createUpdateCall(Call(
         id: const Uuid().v4(),
         patientId: _currentPatientId!,
-        questionType: QuestionList.abdominalPain.index,
-        questions: questions,
         patient: Patient(
             id: "1o4Ne6GsML51CAUuqEmp",
             firstName: "John",
             lastName: "Doe",
             createdDate: Timestamp.now()),
+        address: addressController.value.toString().trim(),
+        questionType: QuestionList.abdominalPain.index,
+        questions: questions,
         userId: null,
         status: CallStatusList.dispatched.index,
         createdDate: Timestamp.now()));
