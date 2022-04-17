@@ -1,0 +1,4 @@
+enum QuestionList {
+  abdominalPain,
+  bitesAndStings,
+}

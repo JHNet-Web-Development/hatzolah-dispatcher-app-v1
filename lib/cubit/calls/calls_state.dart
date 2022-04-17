@@ -59,6 +59,10 @@ class CallUpdated extends CallsState {
   const CallUpdated(MainCallsState mainCallsState) : super(mainCallsState);
 }
 
+class CallCreated extends CallsState {
+  const CallCreated(MainCallsState mainCallsState) : super(mainCallsState);
+}
+
 class CallsError extends CallsState {
   const CallsError(MainCallsState mainCallsState) : super(mainCallsState);
 }

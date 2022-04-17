@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   //Remove this
   _createCalls() {
 
-      List<Call> calls = [
+      /*List<Call> calls = [
         Call(id: const Uuid().v4(), patientId: "1o4Ne6GsML51CAUuqEmp", patient: Patient(id: "1o4Ne6GsML51CAUuqEmp", firstName: "John", lastName: "Doe", createdDate: Timestamp.now()), userId: null, createdDate: Timestamp.now()),
         Call(id: const Uuid().v4(), patientId: "U3uJVU42gimKUe1Gu1j6", patient: Patient(id: "U3uJVU42gimKUe1Gu1j6", firstName: "Gary", lastName: "Musk", createdDate: Timestamp.now()), userId: null, createdDate: Timestamp.now()),
         Call(id: const Uuid().v4(), patientId: "gK7pePxUQBveiu22BaZT", patient: Patient(id: "gK7pePxUQBveiu22BaZT", firstName: "Mary", lastName: "Woodland", createdDate: Timestamp.now()), userId: null, createdDate: Timestamp.now())
@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
       for (var i = 0; i < calls.length; i++) {
         _callsCubit.createUpdateCall(calls[i]);
-    }
+    }*/
   }
 
   _createHospitals() {
