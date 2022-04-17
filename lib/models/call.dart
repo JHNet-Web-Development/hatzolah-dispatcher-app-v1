@@ -20,7 +20,7 @@ class Call extends Equatable{
   const Call({required this.id, required this.patientId, required this.patient, this.patientVitals, required this.questionType, required this.questions ,required this.userId, required this.createdDate});
 
   @override
-  List<Object?> get props => [id, patientId, patient, questionType, patientVitals, userId, createdDate];
+  List<Object?> get props => [id, patientId, patient, questionType, questions, patientVitals, userId, createdDate];
 
   Call copyWith({
     String? id,
@@ -58,15 +58,14 @@ class Call extends Equatable{
   }
 
   factory Call.fromMap(Map<String, dynamic> map) {
-
     var questionMapType;
 
     switch (map['questionType']) {
       case 0:
-        questionMapType = AbdominalPainQuestions.fromMap(map['patientVitals']);
+        questionMapType = AbdominalPainQuestions.fromMap(map['questions']);
         break;
       case 1:
-        questionMapType = BitesAndStingsQuestions.fromMap(map['patientVitals']);
+        questionMapType = BitesAndStingsQuestions.fromMap(map['questions']);
         break;
     }
 
