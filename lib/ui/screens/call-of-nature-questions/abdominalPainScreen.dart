@@ -2,9 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hatzolah_dispatcher_app/constants/constants.dart';
+import 'package:hatzolah_dispatcher_app/constants/question-list.dart';
 import 'package:hatzolah_dispatcher_app/core/dependencies.dart';
 import 'package:hatzolah_dispatcher_app/cubit/calls/calls_cubit.dart';
+import 'package:hatzolah_dispatcher_app/models/call.dart';
 import 'package:hatzolah_dispatcher_app/models/patient.dart';
+import 'package:hatzolah_dispatcher_app/models/question-models/abdominal-pain-questions.dart';
 import 'package:uuid/uuid.dart';
 
 class AbdominalPainScreen extends StatefulWidget {
@@ -17,6 +20,7 @@ class AbdominalPainScreen extends StatefulWidget {
 class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
   final CallsCubit _callsCubit = sl<CallsCubit>();
 
+  String? _currentPatientId;
   final TextEditingController addressController = TextEditingController();
   bool _patientAlert = false;
   bool _troubleBreathing = false;
@@ -28,6 +32,29 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
   bool _recentVomiting = false;
 
   _createCall() {
+    FocusScope.of(context).unfocus();
+    var questions = AbdominalPainQuestions(
+        patientAlert: _patientAlert,
+        troubleBreathing: _troubleBreathing,
+        bleeding: _bleeding,
+        dizzyOrFaint: _dizzyrOrFaint,
+        pale: _pale,
+        chestPain: _chestPain,
+        recentSurgery: _recentSurgery,
+        recentVomiting: _recentVomiting
+    );
+    _callsCubit.createUpdateCall(Call(
+        id: const Uuid().v4(),
+        patientId: _currentPatientId!,
+        questionType: QuestionList.abdominalPain.index,
+        questions: questions,
+        patient: Patient(
+            id: "1o4Ne6GsML51CAUuqEmp",
+            firstName: "John",
+            lastName: "Doe",
+            createdDate: Timestamp.now()),
+        userId: null,
+        createdDate: Timestamp.now()));
   }
 
   @override
@@ -38,7 +65,18 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocListener<CallsCubit, CallsState>(
+      bloc: _callsCubit,
+      listener: (context, state) {
+        if (state is CallUpdated) {
+          const snackBar = SnackBar(
+            content: Text('Yay! Call created!'),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          Navigator.pop(context);
+        }
+      },
+  child: Scaffold(
       appBar: AppBar(
         title: const Text("Abdominal Pain"),
       ),
@@ -49,27 +87,41 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
             children: [
               const Text("Patient Details", style: TextStyle(fontSize: 16),),
               Padding(
-                padding: const EdgeInsets.only(top: 25, left: 5, right: 5, bottom: 10),
+                padding: const EdgeInsets.only(
+                    top: 25, left: 5, right: 5, bottom: 10),
                 child: BlocBuilder<CallsCubit, CallsState>(
                   bloc: _callsCubit,
                   builder: (context, state) {
                     List<Patient> patients = state.mainCallsState.patients;
                     return DropdownButtonFormField(
-                        items: patients.map((Patient patient) {
-                          return DropdownMenuItem<String>(
-                            value: patient.id,
-                            child: Text(patient.firstName + " " + patient.lastName),
-                          );
-                        }).toList(),
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius:  BorderRadius.circular(5.0),
-                            borderSide:  const BorderSide(),
-                          ),
-                          labelText: "Patient",
-                          hintText: "Bill Gates",
+                      value: _currentPatientId,
+                      hint: const Text(
+                        'Please select a Patient',
+                      ),
+                      validator: (value) {
+                        if (value == null) {
+                          return "Patient Required";
+                        } else {
+                          return null;
+                        }
+                      },
+                      items: patients.map((Patient patient) {
+                        return DropdownMenuItem<String>(
+                          value: patient.id,
+                          child: Text(
+                              patient.firstName + " " + patient.lastName),
+                        );
+                      }).toList(),
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                          borderSide: const BorderSide(),
                         ),
-                        onChanged: (_) {},
+                        labelText: "Patient",
+                      ),
+                      onChanged: (value) {
+                        _currentPatientId = value as String;
+                      },
                     );
                   },
                 ),
@@ -211,6 +263,7 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
           ),
         ),
       ),
-    );
+    ),
+);
   }
 }

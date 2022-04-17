@@ -122,7 +122,6 @@ class _BiteAndStingsScreenState extends State<BiteAndStingsScreen> {
                               borderSide: const BorderSide(),
                             ),
                             labelText: "Patient",
-                            hintText: "Bill Gates",
                           ),
                           onChanged: (value) {
                             _currentPatientId = value as String;
@@ -275,9 +274,7 @@ class _BiteAndStingsScreenState extends State<BiteAndStingsScreen> {
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () => _formKey.currentState!.validate()
-                        ? _createCall()
-                        : null,
+                    onPressed: () => _createCall(),
                     child: const Text("Dispatch"),
                     style: ElevatedButton.styleFrom(
                       primary: primaryColour,
