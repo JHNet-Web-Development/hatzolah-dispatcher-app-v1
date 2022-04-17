@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hatzolah_dispatcher_app/constants/call-status-list.dart';
 import 'package:hatzolah_dispatcher_app/constants/constants.dart';
 import 'package:hatzolah_dispatcher_app/constants/question-list.dart';
 import 'package:hatzolah_dispatcher_app/core/dependencies.dart';
@@ -58,6 +59,7 @@ class _BiteAndStingsScreenState extends State<BiteAndStingsScreen> {
             lastName: "Doe",
             createdDate: Timestamp.now()),
         userId: null,
+        status: CallStatusList.dispatched.index,
         createdDate: Timestamp.now()));
   }
 

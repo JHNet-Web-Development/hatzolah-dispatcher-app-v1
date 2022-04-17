@@ -15,12 +15,13 @@ class Call extends Equatable{
   final int questionType;
   final dynamic questions;
   final String? userId;
+  final int status;
   final Timestamp createdDate;
 
-  const Call({required this.id, required this.patientId, required this.patient, this.patientVitals, required this.questionType, required this.questions ,required this.userId, required this.createdDate});
+  const Call({required this.id, required this.patientId, required this.patient, this.patientVitals, required this.questionType, required this.questions ,required this.userId, required this.status, required this.createdDate});
 
   @override
-  List<Object?> get props => [id, patientId, patient, questionType, questions, patientVitals, userId, createdDate];
+  List<Object?> get props => [id, patientId, patient, questionType, questions, patientVitals, userId, status, createdDate];
 
   Call copyWith({
     String? id,
@@ -30,6 +31,7 @@ class Call extends Equatable{
     int? questionType,
     dynamic questions,
     String? userId,
+    int? status,
     Timestamp? createdDate,
   }) {
     return Call(
@@ -40,6 +42,7 @@ class Call extends Equatable{
       questionType : questionType ?? this.questionType,
       questions: questions ?? this.questions,
       userId: userId ?? this.userId,
+      status: status ?? this.status,
       createdDate: createdDate ?? this.createdDate,
     );
   }
@@ -53,6 +56,7 @@ class Call extends Equatable{
       'questionType': questionType,
       'questions': questions != null ? questions?.toMap() : questions,
       'userId': userId,
+      'status': status,
       'createdDate': createdDate,
     };
   }
@@ -77,6 +81,7 @@ class Call extends Equatable{
       questionType: map['questionType'],
       questions: map['questions'] != null ?  questionMapType: map['questions'],
       userId: map['userId'],
+      status: map['status'],
       createdDate: map['createdDate'],
     );
   }
