@@ -46,7 +46,6 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
     );
     _callsCubit.createUpdateCall(Call(
         id: const Uuid().v4(),
-        patientId: _currentPatient!.id,
         patient: Patient(
             id: _currentPatient!.id,
             firstName: _currentPatient!.firstName,
@@ -58,7 +57,11 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
         questions: questions,
         userId: null,
         status: CallStatusList.dispatched.index,
-        createdDate: Timestamp.now()));
+        dispatchedDate: Timestamp.now(),
+        acceptedDate: null,
+        arrivedDate: null,
+        closedDate: null,
+    ));
   }
 
   @override

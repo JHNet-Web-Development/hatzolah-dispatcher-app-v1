@@ -50,7 +50,6 @@ class _BiteAndStingsScreenState extends State<BiteAndStingsScreen> {
         historyAllergicReactions: _historyAllergicReactions);
     _callsCubit.createUpdateCall(Call(
         id: const Uuid().v4(),
-        patientId: _currentPatient!.id,
         patient: Patient(
             id: _currentPatient!.id,
             firstName: _currentPatient!.firstName,
@@ -62,7 +61,7 @@ class _BiteAndStingsScreenState extends State<BiteAndStingsScreen> {
         questions: questions,
         userId: null,
         status: CallStatusList.dispatched.index,
-        createdDate: Timestamp.now()));
+        dispatchedDate: Timestamp.now()));
   }
 
   @override

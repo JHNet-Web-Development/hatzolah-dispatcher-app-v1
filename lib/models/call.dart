@@ -9,7 +9,6 @@ import 'package:hatzolah_dispatcher_app/models/question-models/bites-and-stings-
 
 class Call extends Equatable{
   final String id;
-  final String patientId;
   final Patient patient;
   final String address;
   final CallPatientVitals? patientVitals;
@@ -17,16 +16,18 @@ class Call extends Equatable{
   final dynamic questions;
   final String? userId;
   final int status;
-  final Timestamp createdDate;
+  final Timestamp dispatchedDate;
+  final Timestamp? acceptedDate;
+  final Timestamp? arrivedDate;
+  final Timestamp? closedDate;
 
-  const Call({required this.id, required this.patientId, required this.patient, required this.address, this.patientVitals, required this.questionType, required this.questions ,required this.userId, required this.status, required this.createdDate});
+  const Call({required this.id, required this.patient, required this.address, this.patientVitals, required this.questionType, required this.questions ,required this.userId, required this.status, required this.dispatchedDate, this.acceptedDate, this.arrivedDate, this.closedDate});
 
   @override
-  List<Object?> get props => [id, patientId, patient, address, questionType, questions, patientVitals, userId, status, createdDate];
+  List<Object?> get props => [id, patient, address, questionType, questions, patientVitals, userId, status, dispatchedDate, acceptedDate, arrivedDate, closedDate];
 
   Call copyWith({
     String? id,
-    String? patientId,
     Patient? patient,
     String? address,
     CallPatientVitals? patientVitals,
@@ -34,11 +35,13 @@ class Call extends Equatable{
     dynamic questions,
     String? userId,
     int? status,
-    Timestamp? createdDate,
+    Timestamp? dispatchedDate,
+    Timestamp? acceptedDate,
+    Timestamp? arrivedDate,
+    Timestamp? closedDate,
   }) {
     return Call(
       id: id ?? this.id,
-      patientId: patientId ?? this.patientId,
       patient: patient ?? this.patient,
       address: address ?? this.address,
       patientVitals: patientVitals ?? this.patientVitals,
@@ -46,14 +49,16 @@ class Call extends Equatable{
       questions: questions ?? this.questions,
       userId: userId ?? this.userId,
       status: status ?? this.status,
-      createdDate: createdDate ?? this.createdDate,
+      dispatchedDate: dispatchedDate ?? this.dispatchedDate,
+      acceptedDate: acceptedDate ?? this.acceptedDate,
+      arrivedDate: arrivedDate ?? this.arrivedDate,
+      closedDate: closedDate ?? this.closedDate,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'patientId': patientId,
       'patient': patient.toMap(),
       'address': address,
       'patientVitals': patientVitals != null ? patientVitals?.toMap() : patientVitals,
@@ -61,7 +66,10 @@ class Call extends Equatable{
       'questions': questions != null ? questions?.toMap() : questions,
       'userId': userId,
       'status': status,
-      'createdDate': createdDate,
+      'dispatchedDate': dispatchedDate,
+      'acceptedDate': acceptedDate,
+      'arrivedDate': arrivedDate,
+      'closedDate': closedDate,
     };
   }
 
@@ -79,7 +87,6 @@ class Call extends Equatable{
 
     return Call(
       id: map['id'],
-      patientId: map['patientId'],
       patient: map['patient'] != null ? Patient.fromMap(map['patient']) : map['patient'],
       address: map['address'],
       patientVitals: map['patientVitals'] != null ? CallPatientVitals.fromMap(map['patientVitals']) : map['patientVitals'],
@@ -87,7 +94,10 @@ class Call extends Equatable{
       questions: map['questions'] != null ?  questionMapType: map['questions'],
       userId: map['userId'],
       status: map['status'],
-      createdDate: map['createdDate'],
+      dispatchedDate: map['dispatchedDate'],
+      acceptedDate: map['acceptedDate'],
+      arrivedDate: map['arrivedDate'],
+      closedDate: map['closedDate'],
     );
   }
 }
