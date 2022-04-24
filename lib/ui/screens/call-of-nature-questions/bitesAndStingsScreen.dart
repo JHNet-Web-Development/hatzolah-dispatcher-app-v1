@@ -52,7 +52,7 @@ class _BiteAndStingsScreenState extends State<BiteAndStingsScreen> {
     _historyAllergicReactions = questions != null ? questions.historyAllergicReactions : false;
   }
 
-  _createCall() {
+  _createUpdateCall(bool create) {
     FocusScope.of(context).unfocus();
     var questions = BitesAndStingsQuestions(
         patientAlert: _patientAlert,
@@ -62,8 +62,27 @@ class _BiteAndStingsScreenState extends State<BiteAndStingsScreen> {
         dizzyFaintOrSweaty: _dizzyFaintOrSweaty,
         pale: _pale,
         historyAllergicReactions: _historyAllergicReactions);
-    _callsCubit.createUpdateCall(Call(
-        id: const Uuid().v4(),
+
+    if(create)
+    {
+      _callsCubit.createUpdateCall(Call(
+          id: const Uuid().v4(),
+          patient: Patient(
+              id: _currentPatient!.id,
+              firstName: _currentPatient!.firstName,
+              lastName: _currentPatient!.lastName,
+              createdDate: _currentPatient!.createdDate
+          ),
+          address: addressController.text.trim(),
+          questionType: QuestionList.bitesAndStings.index,
+          questions: questions,
+          userId: null,
+          status: CallStatusList.dispatched.index,
+          dispatchedDate: Timestamp.now()));
+    }
+    else
+    {
+      _callsCubit.createUpdateCall(widget.call!.copyWith(
         patient: Patient(
             id: _currentPatient!.id,
             firstName: _currentPatient!.firstName,
@@ -73,9 +92,8 @@ class _BiteAndStingsScreenState extends State<BiteAndStingsScreen> {
         address: addressController.text.trim(),
         questionType: QuestionList.bitesAndStings.index,
         questions: questions,
-        userId: null,
-        status: CallStatusList.dispatched.index,
-        dispatchedDate: Timestamp.now()));
+      ));
+    }
   }
 
   @override
@@ -291,7 +309,7 @@ class _BiteAndStingsScreenState extends State<BiteAndStingsScreen> {
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () => _createCall(),
+                    onPressed: () => _formKey.currentState!.validate() ? _createUpdateCall(widget.call == null) : null,
                     child: widget.call?.dispatchedDate == null ? const Text("Dispatch") : const Text("Update"),
                     style: ElevatedButton.styleFrom(
                       primary: primaryColour,

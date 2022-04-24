@@ -34,7 +34,7 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
   bool _recentSurgery = false;
   bool _recentVomiting = false;
 
-  _createCall() {
+  _createUpdateCall(bool create) {
     FocusScope.of(context).unfocus();
     var questions = AbdominalPainQuestions(
         patientAlert: _patientAlert,
@@ -46,7 +46,10 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
         recentSurgery: _recentSurgery,
         recentVomiting: _recentVomiting
     );
-    _callsCubit.createUpdateCall(Call(
+
+    if(create)
+    {
+      _callsCubit.createUpdateCall(Call(
         id: const Uuid().v4(),
         patient: Patient(
             id: _currentPatient!.id,
@@ -60,7 +63,22 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
         userId: null,
         status: CallStatusList.dispatched.index,
         dispatchedDate: Timestamp.now(),
-    ));
+      ));
+    }
+    else
+    {
+      _callsCubit.createUpdateCall(widget.call!.copyWith(
+        patient: Patient(
+            id: _currentPatient!.id,
+            firstName: _currentPatient!.firstName,
+            lastName: _currentPatient!.lastName,
+            createdDate: _currentPatient!.createdDate
+        ),
+        address: addressController.text.trim(),
+        questionType: QuestionList.abdominalPain.index,
+        questions: questions,
+      ));
+    }
   }
 
   @override
@@ -275,7 +293,7 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () => _createCall(),
+                  onPressed: () => _formKey.currentState!.validate() ? _createUpdateCall(widget.call == null) : null,
                   child: widget.call?.dispatchedDate == null ? const Text("Dispatch") : const Text("Update"),
                   style: ElevatedButton.styleFrom(
                     primary: primaryColour,
