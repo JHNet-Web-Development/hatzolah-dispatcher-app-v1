@@ -52,7 +52,7 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
             lastName: _currentPatient!.lastName,
             createdDate: _currentPatient!.createdDate
         ),
-        address: addressController.value.toString().trim(),
+        address: addressController.text.trim(),
         questionType: QuestionList.abdominalPain.index,
         questions: questions,
         userId: null,

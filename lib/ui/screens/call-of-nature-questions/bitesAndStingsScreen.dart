@@ -56,7 +56,7 @@ class _BiteAndStingsScreenState extends State<BiteAndStingsScreen> {
             lastName: _currentPatient!.lastName,
             createdDate: _currentPatient!.createdDate
         ),
-        address: addressController.value.toString().trim(),
+        address: addressController.text.trim(),
         questionType: QuestionList.bitesAndStings.index,
         questions: questions,
         userId: null,
