@@ -19,6 +19,7 @@ class AbdominalPainScreen extends StatefulWidget {
 }
 
 class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
+  final _formKey = GlobalKey<FormState>();
   final CallsCubit _callsCubit = sl<CallsCubit>();
 
   Patient? _currentPatient;
@@ -58,9 +59,6 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
         userId: null,
         status: CallStatusList.dispatched.index,
         dispatchedDate: Timestamp.now(),
-        acceptedDate: null,
-        arrivedDate: null,
-        closedDate: null,
     ));
   }
 
@@ -87,186 +85,189 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
       appBar: AppBar(
         title: const Text("Abdominal Pain"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 20, left: 15, right: 15, bottom: 20),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const Text("Patient Details", style: TextStyle(fontSize: 16),),
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 25, left: 5, right: 5, bottom: 10),
-                child: BlocBuilder<CallsCubit, CallsState>(
-                  bloc: _callsCubit,
-                  builder: (context, state) {
-                    List<Patient> patients = state.mainCallsState.patients;
-                    return DropdownButtonFormField(
-                      value: _currentPatient,
-                      hint: const Text(
-                        'Please select a Patient',
-                      ),
-                      validator: (value) {
-                        if (value == null) {
-                          return "Patient Required";
-                        } else {
-                          return null;
-                        }
-                      },
-                      items: patients.map((Patient patient) {
-                        return DropdownMenuItem<String>(
-                          value: patient.id,
-                          child: Text(
-                              patient.firstName + " " + patient.lastName),
-                        );
-                      }).toList(),
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                          borderSide: const BorderSide(),
+      body: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 20, left: 15, right: 15, bottom: 20),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const Text("Patient Details", style: TextStyle(fontSize: 16),),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 25, left: 5, right: 5, bottom: 10),
+                  child: BlocBuilder<CallsCubit, CallsState>(
+                    bloc: _callsCubit,
+                    builder: (context, state) {
+                      List<Patient> patients = state.mainCallsState.patients;
+                      return DropdownButtonFormField(
+                        value: _currentPatient,
+                        hint: const Text(
+                          'Please select a Patient',
                         ),
-                        labelText: "Patient",
-                      ),
-                      onChanged: (value) {
-                        _currentPatient = value as Patient;
-                      },
-                    );
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 25),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius:  BorderRadius.circular(5.0),
-                      borderSide:  const BorderSide(),
-                    ),
-                    labelText: "Address",
-                    hintText: "29 Durham St, Sydenham, Johannesburg, 2192",
+                        validator: (value) {
+                          if (value == null) {
+                            return "Patient Required";
+                          } else {
+                            return null;
+                          }
+                        },
+                        items: patients.map((Patient patient) {
+                          return DropdownMenuItem<Patient>(
+                            value: patient,
+                            child: Text(
+                                patient.firstName + " " + patient.lastName),
+                          );
+                        }).toList(),
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                            borderSide: const BorderSide(),
+                          ),
+                          labelText: "Patient",
+                        ),
+                        onChanged: (value) {
+                          _currentPatient = value as Patient;
+                        },
+                      );
+                    },
                   ),
-                  controller: addressController,
-                  validator: (text) {
-                    if (text == null || text.isEmpty) {
-                      return 'Address is Required';
-                    }
-                    return null;
-                  },
                 ),
-              ),
-              const Text("Please answer the following questions", style: TextStyle(fontSize: 16),),
-              Padding(
-                padding: const EdgeInsets.only(top: 25, left: 5, right: 5, bottom: 10),
-                child: SwitchListTile(
-                  title: const Text('Is the patient alert?'),
-                  value: _patientAlert,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _patientAlert = value;
-                    });
-                  },
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 25),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius:  BorderRadius.circular(5.0),
+                        borderSide:  const BorderSide(),
+                      ),
+                      labelText: "Address",
+                      hintText: "29 Durham St, Sydenham, Johannesburg, 2192",
+                    ),
+                    controller: addressController,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Address is Required';
+                      }
+                      return null;
+                    },
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
-                child: SwitchListTile(
-                  title: const Text('Does the patient have any trouble breathing?'),
-                  value: _troubleBreathing,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _troubleBreathing = value;
-                    });
-                  },
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                const Text("Please answer the following questions", style: TextStyle(fontSize: 16),),
+                Padding(
+                  padding: const EdgeInsets.only(top: 25, left: 5, right: 5, bottom: 10),
+                  child: SwitchListTile(
+                    title: const Text('Is the patient alert?'),
+                    value: _patientAlert,
+                    onChanged: (bool value) {
+                      setState(() {
+                        _patientAlert = value;
+                      });
+                    },
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
-                child: SwitchListTile(
-                  title: const Text('Is the patient bleeding from anywhere?'),
-                  value: _bleeding,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _bleeding = value;
-                    });
-                  },
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
+                  child: SwitchListTile(
+                    title: const Text('Does the patient have any trouble breathing?'),
+                    value: _troubleBreathing,
+                    onChanged: (bool value) {
+                      setState(() {
+                        _troubleBreathing = value;
+                      });
+                    },
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
-                child: SwitchListTile(
-                  title: const Text('Is the patient feeling dizzy, faint or sweaty? '),
-                  value: _dizzyrOrFaint,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _dizzyrOrFaint = value;
-                    });
-                  },
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
+                  child: SwitchListTile(
+                    title: const Text('Is the patient bleeding from anywhere?'),
+                    value: _bleeding,
+                    onChanged: (bool value) {
+                      setState(() {
+                        _bleeding = value;
+                      });
+                    },
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
-                child: SwitchListTile(
-                  title: const Text('Is the patient pale? '),
-                  value: _pale,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _pale = value;
-                    });
-                  },
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
+                  child: SwitchListTile(
+                    title: const Text('Is the patient feeling dizzy, faint or sweaty? '),
+                    value: _dizzyrOrFaint,
+                    onChanged: (bool value) {
+                      setState(() {
+                        _dizzyrOrFaint = value;
+                      });
+                    },
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
-                child: SwitchListTile(
-                  title: const Text('Does the patient have any chest pain or chest discomfort? '),
-                  value: _chestPain,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _chestPain = value;
-                    });
-                  },
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
+                  child: SwitchListTile(
+                    title: const Text('Is the patient pale? '),
+                    value: _pale,
+                    onChanged: (bool value) {
+                      setState(() {
+                        _pale = value;
+                      });
+                    },
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
-                child: SwitchListTile(
-                  title: const Text('Has the patient had any recent surgery or injury to the abdomen?'),
-                  value: _recentSurgery,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _recentSurgery = value;
-                    });
-                  },
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
+                  child: SwitchListTile(
+                    title: const Text('Does the patient have any chest pain or chest discomfort? '),
+                    value: _chestPain,
+                    onChanged: (bool value) {
+                      setState(() {
+                        _chestPain = value;
+                      });
+                    },
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
-                child: SwitchListTile(
-                  title: const Text('Is the patient vomiting?'),
-                  value: _recentVomiting,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _recentVomiting = value;
-                    });
-                  },
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
+                  child: SwitchListTile(
+                    title: const Text('Has the patient had any recent surgery or injury to the abdomen?'),
+                    value: _recentSurgery,
+                    onChanged: (bool value) {
+                      setState(() {
+                        _recentSurgery = value;
+                      });
+                    },
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => _createCall(),
-                child: const Text("Dispatch"),
-                style: ElevatedButton.styleFrom(
-                  primary: primaryColour,
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
+                  child: SwitchListTile(
+                    title: const Text('Is the patient vomiting?'),
+                    value: _recentVomiting,
+                    onChanged: (bool value) {
+                      setState(() {
+                        _recentVomiting = value;
+                      });
+                    },
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
+                  ),
                 ),
-              )
-            ],
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => _createCall(),
+                  child: const Text("Dispatch"),
+                  style: ElevatedButton.styleFrom(
+                    primary: primaryColour,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
