@@ -4,6 +4,8 @@ import 'package:hatzolah_dispatcher_app/core/dependencies.dart';
 import 'package:hatzolah_dispatcher_app/cubit/calls/calls_cubit.dart';
 import 'package:hatzolah_dispatcher_app/models/call.dart';
 import 'package:hatzolah_dispatcher_app/constants/constants.dart';
+import 'package:hatzolah_dispatcher_app/ui/screens/call-of-nature-questions/abdominalPainScreen.dart';
+import 'package:hatzolah_dispatcher_app/ui/screens/call-of-nature-questions/bitesAndStingsScreen.dart';
 import 'package:hatzolah_dispatcher_app/ui/screens/callEdit.dart';
 import 'package:intl/intl.dart';
 
@@ -18,39 +20,21 @@ class CallWidget extends StatefulWidget {
 class _CallWidgetState extends State<CallWidget> {
   final CallsCubit _callsCubit = sl<CallsCubit>();
 
-  _confirmCallAssignment(Call call) {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Accept Call'),
-          content: const Text('Are you sure you want to accept this call?'),
-          actions: [
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: dangerColour,
-                ),
-                onPressed: () => Navigator.pop(context), child: const Text('No')
-            ),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: successColour,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                  _callsCubit.createUpdateCall(call.copyWith(userId: "LnOoUagCqSeFimMXgAcDZdwXMnB3"));
-                },
-                child: const Text('Yes')),
-          ],
-        );
-      }
-    );
-  }
-
   _editCall(Call call) {
+    dynamic screenType;
+
+    switch (call.questionType) {
+      case 0:
+        screenType = AbdominalPainScreen(call: call);
+        break;
+      case 1:
+        screenType = BiteAndStingsScreen(call: call);
+        break;
+    }
+
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => CallEditScreen(call: call)),
+      MaterialPageRoute(builder: (context) => screenType),
     );
   }
 
@@ -68,7 +52,7 @@ class _CallWidgetState extends State<CallWidget> {
                   itemBuilder: (context, index) {
                     Call call = widget.myList ? state.mainCallsState.userCalls[index] : state.mainCallsState.newCalls[index];
                     return GestureDetector(
-                      onTap: () => !widget.myList ? _confirmCallAssignment(call) : _editCall(call),
+                      onTap: () => _editCall(call),
                       child: Card(
                         child: ListTile(
                           leading: widget.myList ? Icon(Icons.medical_services, size: 40, color: successColour) : Icon(Icons.error, size: 40, color: dangerColour),

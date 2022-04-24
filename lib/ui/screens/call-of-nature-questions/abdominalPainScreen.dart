@@ -12,7 +12,8 @@ import 'package:hatzolah_dispatcher_app/models/question-models/abdominal-pain-qu
 import 'package:uuid/uuid.dart';
 
 class AbdominalPainScreen extends StatefulWidget {
-  const AbdominalPainScreen({Key? key}) : super(key: key);
+  final Call? call;
+  const AbdominalPainScreen({Key? key, this.call}) : super(key: key);
 
   @override
   State<AbdominalPainScreen> createState() => _AbdominalPainScreenState();
@@ -27,7 +28,7 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
   bool _patientAlert = false;
   bool _troubleBreathing = false;
   bool _bleeding = false;
-  bool _dizzyrOrFaint = false;
+  bool _dizzyOrFaint = false;
   bool _pale = false;
   bool _chestPain = false;
   bool _recentSurgery = false;
@@ -39,7 +40,7 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
         patientAlert: _patientAlert,
         troubleBreathing: _troubleBreathing,
         bleeding: _bleeding,
-        dizzyOrFaint: _dizzyrOrFaint,
+        dizzyOrFaint: _dizzyOrFaint,
         pale: _pale,
         chestPain: _chestPain,
         recentSurgery: _recentSurgery,
@@ -66,6 +67,20 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
   void initState() {
     _callsCubit.getAllPatients();
     super.initState();
+
+    AbdominalPainQuestions? questions = widget.call?.questions;
+
+    //Set edit call variables
+    _currentPatient = widget.call?.patient;
+    addressController.text = widget.call?.address??"";
+    _patientAlert = questions != null ? questions.patientAlert : false;
+    _troubleBreathing = questions != null ? questions.troubleBreathing : false;
+    _bleeding = questions != null ? questions.bleeding : false;
+    _dizzyOrFaint = questions != null ? questions.dizzyOrFaint : false;
+    _pale = questions != null ? questions.pale : false;
+    _chestPain = questions != null ? questions.chestPain : false;
+    _recentSurgery = questions != null ? questions.recentSurgery : false;
+    _recentVomiting = questions != null ? questions.recentVomiting : false;
   }
 
   @override
@@ -197,10 +212,10 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
                   padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
                   child: SwitchListTile(
                     title: const Text('Is the patient feeling dizzy, faint or sweaty? '),
-                    value: _dizzyrOrFaint,
+                    value: _dizzyOrFaint,
                     onChanged: (bool value) {
                       setState(() {
-                        _dizzyrOrFaint = value;
+                        _dizzyOrFaint = value;
                       });
                     },
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0), side: const BorderSide(color: Colors.grey, width: 1)),
@@ -261,7 +276,7 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () => _createCall(),
-                  child: const Text("Dispatch"),
+                  child: widget.call?.dispatchedDate == null ? const Text("Dispatch") : const Text("Update"),
                   style: ElevatedButton.styleFrom(
                     primary: primaryColour,
                   ),

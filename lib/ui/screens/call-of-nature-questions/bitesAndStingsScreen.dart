@@ -12,7 +12,8 @@ import 'package:hatzolah_dispatcher_app/models/question-models/bites-and-stings-
 import 'package:uuid/uuid.dart';
 
 class BiteAndStingsScreen extends StatefulWidget {
-  const BiteAndStingsScreen({Key? key}) : super(key: key);
+  final Call? call;
+  const BiteAndStingsScreen({Key? key, this.call}) : super(key: key);
 
   @override
   State<BiteAndStingsScreen> createState() => _BiteAndStingsScreenState();
@@ -36,6 +37,19 @@ class _BiteAndStingsScreenState extends State<BiteAndStingsScreen> {
   void initState() {
     _callsCubit.getAllPatients();
     super.initState();
+
+    BitesAndStingsQuestions? questions = widget.call?.questions;
+
+    //Set edit call variables
+    _currentPatient = widget.call?.patient;
+    addressController.text = widget.call?.address??"";
+    _patientAlert = questions != null ? questions.patientAlert : false;
+    _troubleBreathing = questions != null ? questions.troubleBreathing : false;
+    _troubleSwallowing = questions != null ? questions.troubleSwallowing : false;
+    _tightnessThroatOrChest = questions != null ? questions.tightnessThroatOrChest : false;
+    _dizzyFaintOrSweaty = questions != null ? questions.dizzyFaintOrSweaty : false;
+    _pale = questions != null ? questions.pale : false;
+    _historyAllergicReactions = questions != null ? questions.historyAllergicReactions : false;
   }
 
   _createCall() {
@@ -278,7 +292,7 @@ class _BiteAndStingsScreenState extends State<BiteAndStingsScreen> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () => _createCall(),
-                    child: const Text("Dispatch"),
+                    child: widget.call?.dispatchedDate == null ? const Text("Dispatch") : const Text("Update"),
                     style: ElevatedButton.styleFrom(
                       primary: primaryColour,
                     ),
