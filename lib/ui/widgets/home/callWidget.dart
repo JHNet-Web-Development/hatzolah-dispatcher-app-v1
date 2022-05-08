@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hatzolah_dispatcher_app/core/dependencies.dart';
@@ -20,6 +21,147 @@ class CallWidget extends StatefulWidget {
 class _CallWidgetState extends State<CallWidget> {
   final CallsCubit _callsCubit = sl<CallsCubit>();
 
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          BlocBuilder<CallsCubit, CallsState>(
+            bloc: _callsCubit,
+            builder: (context, state) {
+              return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: widget.myList
+                      ? state.mainCallsState.userCalls.length
+                      : state.mainCallsState.newCalls.length,
+                  itemBuilder: (context, index) {
+                    Call call = widget.myList
+                        ? state.mainCallsState.userCalls[index]
+                        : state.mainCallsState.newCalls[index];
+                    return _callCard(call);
+                  });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _callCard(Call call) {
+    return Card(
+      child: ExpansionTile(
+        leading: widget.myList
+            ? Icon(Icons.medical_services, size: 40, color: successColour)
+            : Icon(Icons.error, size: 40, color: dangerColour),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 5, left: 0, right: 0, bottom: 10),
+          child: RichText(
+            textAlign: TextAlign.left,
+            text: TextSpan(children: <TextSpan>[
+              const TextSpan(
+                text: 'Patient: ',
+                style: TextStyle(color: Colors.grey, fontSize: 12),
+              ),
+              TextSpan(
+                text: call.patient.firstName + " " + call.patient.lastName,
+                style: const TextStyle(color: Colors.black, fontSize: 14),
+              )
+            ]),
+          ),
+        ),
+        subtitle: Column(children: [
+          Padding(
+            padding:
+                const EdgeInsets.only(top: 5, left: 0, right: 0, bottom: 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: SizedBox(
+                      child: RichText(
+                    textAlign: TextAlign.left,
+                    text: TextSpan(children: <TextSpan>[
+                      const TextSpan(
+                        text: 'Dispatched Date: ',
+                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                      ),
+                      TextSpan(
+                        text: DateFormat('dd/MM/yyyy, hh:mm a')
+                            .format(call.dispatchedDate.toDate()),
+                        style:
+                            const TextStyle(color: Colors.black, fontSize: 14),
+                      )
+                    ]),
+                  )),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.only(top: 5, left: 0, right: 0, bottom: 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: SizedBox(
+                      child: RichText(
+                    textAlign: TextAlign.left,
+                    text: TextSpan(children: <TextSpan>[
+                      const TextSpan(
+                        text: 'Active Time: ',
+                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                      ),
+                      TextSpan(
+                        text: _getActiveTimeText(call),
+                        style:
+                            const TextStyle(color: Colors.black, fontSize: 14),
+                      )
+                    ]),
+                  )),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.only(top: 5, left: 0, right: 0, bottom: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: SizedBox(
+                      child: RichText(
+                    textAlign: TextAlign.left,
+                    text: TextSpan(children: <TextSpan>[
+                      const TextSpan(
+                        text: 'Status: ',
+                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                      ),
+                      TextSpan(
+                        text: _getStatusText(call.status),
+                        style:
+                            const TextStyle(color: Colors.black, fontSize: 14),
+                      )
+                    ]),
+                  )),
+                ),
+              ],
+            ),
+          ),
+        ]),
+        children: <Widget>[
+          ListTile(
+            title: Text(
+              call.address,
+              style: const TextStyle(fontWeight: FontWeight.w700),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   _editCall(Call call) {
     dynamic screenType;
 
@@ -38,35 +180,23 @@ class _CallWidgetState extends State<CallWidget> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          BlocBuilder<CallsCubit, CallsState>(
-            bloc: _callsCubit,
-            builder: (context, state) {
-              return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: widget.myList ? state.mainCallsState.userCalls.length : state.mainCallsState.newCalls.length,
-                  itemBuilder: (context, index) {
-                    Call call = widget.myList ? state.mainCallsState.userCalls[index] : state.mainCallsState.newCalls[index];
-                    return GestureDetector(
-                      onTap: () => _editCall(call),
-                      child: Card(
-                        child: ListTile(
-                          leading: widget.myList ? Icon(Icons.medical_services, size: 40, color: successColour) : Icon(Icons.error, size: 40, color: dangerColour),
-                          title: Text(call.patient.firstName + " " + call.patient.lastName),
-                          subtitle: Text(DateFormat('dd/MM/yyyy, hh:mm a').format(call.dispatchedDate.toDate())),
-                          isThreeLine: false,
-                        ),
-                      ),
-                    );
-                  });
-            },
-          ),
-        ],
-      ),
-    );
+  _getActiveTimeText(Call call) {
+    /*DateTime dispatchedTime = DateTime.parse(call.dispatchedDate.toString());
+    DateTime currentTime = DateTime.now();
+    String difference = currentTime.difference(dispatchedTime).toString();*/
+    return "00h 05m 59s";
+  }
+
+  _getStatusText(int status) {
+    switch (status) {
+      case 0:
+        return "Dispatched";
+      case 1:
+        return "Accepted";
+      case 2:
+        return "Arrived";
+      case 3:
+        return "Closed";
+    }
   }
 }
