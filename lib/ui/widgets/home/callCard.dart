@@ -17,18 +17,25 @@ class CallCard extends StatefulWidget {
 
 class _CallCardState extends State<CallCard> {
   int _passedDispatchedDuration = 1;
+  late Timer _timer;
 
   @override
   void initState() {
     _passedDispatchedDuration = DateTime.now().difference(DateTime.fromMicrosecondsSinceEpoch(widget.call.dispatchedDate.microsecondsSinceEpoch)).inMicroseconds;
     const oneSec = Duration(seconds:1);
-    Timer.periodic(oneSec, (Timer t) {
+    _timer = Timer.periodic(oneSec, (Timer t) {
       _passedDispatchedDuration = _passedDispatchedDuration + 1000000;
       setState(() {
 
       });
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
