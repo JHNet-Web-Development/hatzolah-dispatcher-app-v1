@@ -29,21 +29,24 @@ class _CallWidgetState extends State<CallWidget> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          BlocBuilder<CallsCubit, CallsState>(
-            bloc: _callsCubit,
-            builder: (context, state) {
-              return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: widget.myList
-                      ? state.mainCallsState.userCalls.length
-                      : state.mainCallsState.newCalls.length,
-                  itemBuilder: (context, index) {
-                    Call call = widget.myList
-                        ? state.mainCallsState.userCalls[index]
-                        : state.mainCallsState.newCalls[index];
-                    return CallCard(call: call);
-                  });
-            },
+          Padding(
+            padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
+            child: BlocBuilder<CallsCubit, CallsState>(
+              bloc: _callsCubit,
+              builder: (context, state) {
+                return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: widget.myList
+                        ? state.mainCallsState.userCalls.length
+                        : state.mainCallsState.newCalls.length,
+                    itemBuilder: (context, index) {
+                      Call call = widget.myList
+                          ? state.mainCallsState.userCalls[index]
+                          : state.mainCallsState.newCalls[index];
+                      return CallCard(call: call);
+                    });
+              },
+            ),
           ),
         ],
       ),
