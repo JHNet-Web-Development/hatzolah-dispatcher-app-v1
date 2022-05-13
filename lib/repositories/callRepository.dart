@@ -18,20 +18,9 @@ class CallRepository{
     _callsCollection.doc(call.id).set(call, SetOptions(merge: true));
   }
 
-  Stream<QuerySnapshot<Call?>> getUserCallsStream() {
-    if(_authenticationCubit.state.mainAuthenticationState.user == null || _authenticationCubit.state.mainAuthenticationState.user?.id == null || _authenticationCubit.state.mainAuthenticationState.user?.id == ""){
-      throw 'User not found.';
-    }
+  Stream<QuerySnapshot<Call?>> getCallsStream() {
     try{
-      return _callsCollection.where('userId', isEqualTo: 'LnOoUagCqSeFimMXgAcDZdwXMnB3').snapshots();
-    } catch(error) {
-      throw 'Error ${error.toString()}';
-    }
-  }
-
-  Stream<QuerySnapshot<Call?>> getNewCallsStream() {
-    try{
-      return _callsCollection.where('userId', isNull: true).snapshots();
+      return _callsCollection.snapshots();
     } catch(error) {
       throw 'Error ${error.toString()}';
     }

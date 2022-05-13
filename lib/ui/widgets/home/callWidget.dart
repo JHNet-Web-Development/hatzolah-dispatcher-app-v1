@@ -36,13 +36,9 @@ class _CallWidgetState extends State<CallWidget> {
               builder: (context, state) {
                 return ListView.builder(
                     shrinkWrap: true,
-                    itemCount: widget.myList
-                        ? state.mainCallsState.userCalls.length
-                        : state.mainCallsState.newCalls.length,
+                    itemCount: state.mainCallsState.calls.length,
                     itemBuilder: (context, index) {
-                      Call call = widget.myList
-                          ? state.mainCallsState.userCalls[index]
-                          : state.mainCallsState.newCalls[index];
+                      Call call = state.mainCallsState.calls[index];
                       return CallCard(call: call);
                     });
               },
@@ -51,30 +47,5 @@ class _CallWidgetState extends State<CallWidget> {
         ],
       ),
     );
-  }
-
-  _editCall(Call call) {
-    dynamic screenType;
-
-    switch (call.questionType) {
-      case 0:
-        screenType = AbdominalPainScreen(call: call);
-        break;
-      case 1:
-        screenType = BiteAndStingsScreen(call: call);
-        break;
-    }
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => screenType),
-    );
-  }
-
-  _getActiveTimeText(Call call) {
-    /*DateTime dispatchedTime = DateTime.parse(call.dispatchedDate.toString());
-    DateTime currentTime = DateTime.now();
-    String difference = currentTime.difference(dispatchedTime).toString();*/
-    return "00h 05m 59s";
   }
 }

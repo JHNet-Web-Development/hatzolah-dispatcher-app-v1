@@ -320,6 +320,8 @@ class _CallCardState extends State<CallCard> {
       case 2:
         return "Arrived";
       case 3:
+        return "Vitals Loaded";
+      case 4:
         return "Closed";
     }
   }
@@ -333,6 +335,8 @@ class _CallCardState extends State<CallCard> {
       case 2:
         return primaryColour;
       case 3:
+        return greyColour;
+      case 4:
         return successColour;
     }
   }

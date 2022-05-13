@@ -26,53 +26,12 @@ class CallsCubit extends Cubit<CallsState> {
     }
   }
 
-  getNewCalls() {
+  getCalls() {
     try {
-      _callRepository.getNewCallsStream().listen((QuerySnapshot<Call?> snapshot) async {
-        emit(CallsLoading(state.mainCallsState.copyWith(message: 'Get list of New Calls')));
-        List<Call> newCalls = snapshot.docs.map((e) => e.data()!).toList();
-        /*List<Patient> patientsInDb = [];
-
-        if(newCalls.isNotEmpty) {
-          List<String> patientIds = [];
-
-          for (var i = 0; i < newCalls.length; i++)
-          {
-            patientIds.add(newCalls[i].patientId);
-          }
-
-          if(patientIds.isNotEmpty) {
-            _patientRepository.getPatientsStream(patientIds).listen((QuerySnapshot<Patient?> snapshot) async {
-              patientsInDb = snapshot.docs.map((e) => e.data()!).toList();
-            });
-          }
-        }
-
-        if(patientsInDb.isNotEmpty){
-          for (var i = 0; i < newCalls.length; i++)
-          {
-            for (var j = 0; j < patientsInDb.length; j++)
-            {
-              if(newCalls[i].patientId == patientsInDb[j].id){
-                newCalls[i].patient = patientsInDb[j];
-              }
-            }
-          }
-        }*/
-
-        emit(CallsLoaded(state.mainCallsState.copyWith(message: "Loaded New Calls", newCalls: newCalls)));
-      });
-    } catch (error) {
-      emit(CallsError(state.mainCallsState.copyWith(message: 'Failed loading New Calls')));
-    }
-  }
-
-  getUserCalls() {
-    try {
-      _callRepository.getUserCallsStream().listen((QuerySnapshot<Call?> snapshot) async {
+      _callRepository.getCallsStream().listen((QuerySnapshot<Call?> snapshot) async {
         emit(CallsLoading(state.mainCallsState.copyWith(message: 'Get list of User Calls')));
-        List<Call> userCalls = snapshot.docs.map((e) => e.data()!).toList();
-        emit(CallsLoaded(state.mainCallsState.copyWith(message: "Loaded User Calls", userCalls: userCalls)));
+        List<Call> calls = snapshot.docs.map((e) => e.data()!).toList();
+        emit(CallsLoaded(state.mainCallsState.copyWith(message: "Loaded User Calls", calls: calls)));
       });
     } catch (error) {
       emit(CallsError(state.mainCallsState.copyWith(message: 'Failed loading User Calls')));

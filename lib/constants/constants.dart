@@ -7,3 +7,4 @@ Color backgroundColour = HexColor("#f9f9f9");
 Color successColour = HexColor("#8dbf42");
 Color warningColour = HexColor("#e2a03f");
 Color dangerColour = HexColor("#e7515a");
+Color greyColour = HexColor("#999999");

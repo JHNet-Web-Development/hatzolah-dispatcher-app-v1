@@ -22,46 +22,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
-  // Constant values
-  final String _welcomeMessage = "Welcome to Hatzolah.";
-
   final AuthenticationCubit _authenticationCubit = sl<AuthenticationCubit>();
   final CallsCubit _callsCubit = sl<CallsCubit>();
   final HospitalCubit _hospitalCubit = sl<HospitalCubit>();
   late TabController tabController;
 
-  //Remove this
-  _createCalls() {
-
-      /*List<Call> calls = [
-        Call(id: const Uuid().v4(), patientId: "1o4Ne6GsML51CAUuqEmp", patient: Patient(id: "1o4Ne6GsML51CAUuqEmp", firstName: "John", lastName: "Doe", createdDate: Timestamp.now()), userId: null, createdDate: Timestamp.now()),
-        Call(id: const Uuid().v4(), patientId: "U3uJVU42gimKUe1Gu1j6", patient: Patient(id: "U3uJVU42gimKUe1Gu1j6", firstName: "Gary", lastName: "Musk", createdDate: Timestamp.now()), userId: null, createdDate: Timestamp.now()),
-        Call(id: const Uuid().v4(), patientId: "gK7pePxUQBveiu22BaZT", patient: Patient(id: "gK7pePxUQBveiu22BaZT", firstName: "Mary", lastName: "Woodland", createdDate: Timestamp.now()), userId: null, createdDate: Timestamp.now())
-      ];
-
-      for (var i = 0; i < calls.length; i++) {
-        _callsCubit.createUpdateCall(calls[i]);
-    }*/
-  }
-
-  _createHospitals() {
-
-    List<Hospital> hospitals = [
-      Hospital(id: const Uuid().v4(), name: "Netcare Sunward Park Hospital", createdDate: Timestamp.now()),
-      Hospital(id: const Uuid().v4(), name: "Netcare Sunninghill Hospital", createdDate: Timestamp.now()),
-    ];
-
-    for (var i = 0; i < hospitals.length; i++) {
-      _hospitalCubit.createUpdateHospital(hospitals[i]);
-    }
-  }
-
   @override
   void initState() {
     super.initState();
    tabController = TabController(length: 2, vsync: this);
-    _callsCubit.getNewCalls();
-    _callsCubit.getUserCalls();
+    _callsCubit.getCalls();
     _hospitalCubit.getHospitals();
     //_createCalls();
    // _createHospitals();
