@@ -23,14 +23,16 @@ class _CallCardState extends State<CallCard> {
 
   @override
   void initState() {
-    _passedDispatchedDuration = DateTime.now().difference(DateTime.fromMicrosecondsSinceEpoch(widget.call.dispatchedDate.microsecondsSinceEpoch)).inMicroseconds;
-    const oneSec = Duration(seconds:1);
-    _timer = Timer.periodic(oneSec, (Timer t) {
-      _passedDispatchedDuration = _passedDispatchedDuration + 1000000;
-      setState(() {
+    if(widget.call.status != CallStatusList.closed.index){
+      _passedDispatchedDuration = DateTime.now().difference(DateTime.fromMicrosecondsSinceEpoch(widget.call.dispatchedDate.microsecondsSinceEpoch)).inMicroseconds;
+      const oneSec = Duration(seconds:1);
+      _timer = Timer.periodic(oneSec, (Timer t) {
+        _passedDispatchedDuration = _passedDispatchedDuration + 1000000;
+        setState(() {
 
+        });
       });
-    });
+    }
     super.initState();
   }
 
@@ -79,7 +81,7 @@ class _CallCardState extends State<CallCard> {
                               style: TextStyle(color: Colors.grey, fontSize: 12),
                             ),
                             TextSpan(
-                              text: _formatDuration(_passedDispatchedDuration),
+                              text: widget.call.status == CallStatusList.closed.index ? _formatDuration(DateTime.now().difference(DateTime.fromMicrosecondsSinceEpoch(widget.call.dispatchedDate.microsecondsSinceEpoch)).inMicroseconds) : _formatDuration(_passedDispatchedDuration),
                               style:
                               const TextStyle(color: Colors.black, fontSize: 14),
                             )
