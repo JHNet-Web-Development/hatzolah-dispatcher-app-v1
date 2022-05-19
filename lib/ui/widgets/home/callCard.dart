@@ -19,7 +19,7 @@ class CallCard extends StatefulWidget {
 
 class _CallCardState extends State<CallCard> {
   int _passedDispatchedDuration = 1;
-  late Timer _timer;
+  Timer? _timer;
 
   @override
   void initState() {
@@ -38,7 +38,7 @@ class _CallCardState extends State<CallCard> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 
