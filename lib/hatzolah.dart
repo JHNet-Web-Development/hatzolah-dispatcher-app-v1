@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hatzolah_dispatcher_app/constants/themes.dart';
 import 'package:hatzolah_dispatcher_app/core/dependencies.dart';
 import 'package:hatzolah_dispatcher_app/cubit/authentication/authentication_cubit.dart';
-import 'package:hatzolah_dispatcher_app/ui/screens/login.dart';
 import 'package:hatzolah_dispatcher_app/ui/screens/home.dart';
+import 'package:hatzolah_dispatcher_app/ui/screens/login/login_screen.dart';
 import 'package:hatzolah_dispatcher_app/ui/screens/splash.dart';
 
 class Hatzolah extends StatefulWidget {
