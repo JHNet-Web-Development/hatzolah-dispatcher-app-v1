@@ -9,6 +9,7 @@ import 'package:hatzolah_dispatcher_app/cubit/calls/calls_cubit.dart';
 import 'package:hatzolah_dispatcher_app/models/call.dart';
 import 'package:hatzolah_dispatcher_app/models/patient.dart';
 import 'package:hatzolah_dispatcher_app/models/question-models/abdominal-pain-questions.dart';
+import 'package:hatzolah_dispatcher_app/ui/screens/home.dart';
 import 'package:uuid/uuid.dart';
 
 class AbdominalPainScreen extends StatefulWidget {
@@ -111,7 +112,10 @@ class _AbdominalPainScreenState extends State<AbdominalPainScreen> {
             content: Text('Yay! Call created!'),
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
         }
       },
   child: Scaffold(
