@@ -29,7 +29,6 @@ class _CallCardState extends State<CallCard> {
       _timer = Timer.periodic(oneSec, (Timer t) {
         _passedDispatchedDuration = _passedDispatchedDuration + 1000000;
         setState(() {
-
         });
       });
     }
@@ -44,6 +43,9 @@ class _CallCardState extends State<CallCard> {
 
   @override
   Widget build(BuildContext context) {
+    if(widget.call.status == CallStatusList.closed.index){
+      _timer?.cancel();
+    }
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
@@ -76,12 +78,12 @@ class _CallCardState extends State<CallCard> {
                         child: RichText(
                           textAlign: TextAlign.left,
                           text: TextSpan(children: <TextSpan>[
-                            const TextSpan(
-                              text: 'Active Time: ',
-                              style: TextStyle(color: Colors.grey, fontSize: 12),
+                            TextSpan(
+                              text: widget.call.status == CallStatusList.closed.index ? 'Time Spent: ' : 'Active Time: ',
+                              style: const TextStyle(color: Colors.grey, fontSize: 12),
                             ),
                             TextSpan(
-                              text: widget.call.status == CallStatusList.closed.index ? _formatDuration(DateTime.now().difference(DateTime.fromMicrosecondsSinceEpoch(widget.call.dispatchedDate.microsecondsSinceEpoch)).inMicroseconds) : _formatDuration(_passedDispatchedDuration),
+                              text: widget.call.status == CallStatusList.closed.index ? _formatDuration(DateTime.fromMicrosecondsSinceEpoch(widget.call.closedDate!.microsecondsSinceEpoch).difference(DateTime.fromMicrosecondsSinceEpoch(widget.call.dispatchedDate.microsecondsSinceEpoch)).inMicroseconds) : _formatDuration(_passedDispatchedDuration),
                               style:
                               const TextStyle(color: Colors.black, fontSize: 14),
                             )
